@@ -2,7 +2,7 @@ import express from "express"
 import jwt from "jsonwebtoken"
 
 const app = express()
-
+// test router
 app.get('/api', (request, response) => {
     response.json({
         message: "Hey I'm there ! Welcome to this API service"
