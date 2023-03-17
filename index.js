@@ -1,7 +1,11 @@
 import express from "express"
 import jwt from "jsonwebtoken"
+import bcrypt from 'bcryptjs' 
+
 
 const app = express()
+
+app.use(express.json())
 // test router only for testing
 app.get('/api', (request, response) => {
     response.json({
@@ -56,6 +60,51 @@ function verifyToken(request, response, next) {
         response.sendStatus(403) //forbidden
     }
 }
+
+
+
+app.post("/passwordRouting",(req,res)=>{
+    // Requiring module
+
+
+const password = req.body.password;
+var hashedPassword;
+
+// Encryption of the string password
+bcrypt.genSalt(10, function (err, Salt) {
+
+	// The bcrypt is used for encrypting password.
+	bcrypt.hash(password, Salt, function (err, hash) {
+
+		if (err) {
+			return console.log('Cannot encrypt');
+		}
+
+		hashedPassword = hash;
+		console.log(hash);
+
+		bcrypt.compare(password, hashedPassword,
+			async function (err, isMatch) {
+
+			// Comparing the original password to
+			// encrypted password
+			if (isMatch) {
+				console.log('Encrypted password is: ', password);
+				console.log('Decrypted password is: ', hashedPassword);
+			}
+
+			if (!isMatch) {
+			
+				// If password doesn't match the following
+				// message will be sent
+				console.log(hashedPassword + ' is not encryption of '
+				+ password);
+			}
+		})
+	})
+})
+
+})
 
 
 app.listen(3000, (request, response) => {
